@@ -10,8 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String name = "Sourabh";
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "my first app",
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
           //   seedColor: const Color.fromARGB(255, 124, 196, 255),
           // ),
           ),
-      home: App(name: name),
+      home: const App(name: 'My App'),
     );
   }
 }
