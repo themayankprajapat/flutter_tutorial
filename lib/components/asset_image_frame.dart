@@ -5,6 +5,10 @@ class AssetImageFrame extends StatelessWidget {
   final String src;
   @override
   Widget build(BuildContext context) {
-    return Image.asset(src, width: 110, height: 110);
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      color: Colors.blue,
+      child: Image.asset(src),
+    );
   }
 }
