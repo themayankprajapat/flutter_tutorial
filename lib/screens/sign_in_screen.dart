@@ -33,7 +33,7 @@ class SignInScreen extends StatelessWidget {
                 AssetImageFrame(src: Images.login),
                 NetworkImageFrame(
                   'https://rukminim2.flixcart.com/fk-p-flap/1100/500/image/97f24748652e61ae.png?q=20',
-                  height: 200,
+                  // height: 200,
                 ),
                 NetworkImageFrame(
                   'https://rukminim2.flixcart.com/fk-p-flap/1100/500/image/97f24748652e61ae.png?q=20',

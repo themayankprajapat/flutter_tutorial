@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial/app.dart';
+import 'package:flutter_tutorial/screens/table_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           //   seedColor: const Color.fromARGB(255, 124, 196, 255),
           // ),
           ),
-      home: const App(name: 'My App'),
+      home: const TableScreen(),
     );
   }
 }
