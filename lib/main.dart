@@ -14,14 +14,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Flutter Tutorial",
       theme: ThemeData(
-          useMaterial3: true,
-          appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.deepOrange,
-              iconTheme: IconThemeData(color: Colors.black)),
-          // colorScheme: ColorScheme.fromSeed(
-          //   seedColor: const Color.fromARGB(255, 124, 196, 255),
-          // ),
-          ),
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.deepOrange,
+            iconTheme: IconThemeData(color: Colors.amber)),
+        // colorScheme: ColorScheme.fromSeed(
+        //   seedColor: const Color.fromARGB(255, 124, 196, 255),
+        // ),
+      ),
       home: const ButtonScreen(),
     );
   }
