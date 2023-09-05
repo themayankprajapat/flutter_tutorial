@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tutorial/screens/stateful_screen.dart';
 
 final textController = TextEditingController();
 
@@ -67,6 +68,12 @@ class TextFieldScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StatefulScreen(),
+                  ),
+                );
                 log(textController.text);
               },
               child: const Text('Send'),
