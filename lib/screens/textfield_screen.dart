@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 class TextFieldScreen extends StatefulWidget {
@@ -14,7 +12,22 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
 
   List<Map<String, dynamic>> chats = [];
   bool check = false;
-  
+
+  bool send = false;
+
+  @override
+  void initState() {
+    super.initState();
+    textController.addListener(() {
+      if (textController.text.isNotEmpty) {
+        send = true;
+      } else {
+        send = false;
+      }
+      setState(() {});
+    });
+  }
+
   @override
   void dispose() {
     textController.dispose();
@@ -30,43 +43,44 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
           mainAxisSize: MainAxisSize.min,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Row(
-              children: [
-                Checkbox(
-                  value: check,
-                  onChanged: (val) {
-                    setState(() {
-                      check = !check;
-                    });
-                    log(val.toString(), name: 'checkbox value');
-                  },
-                ),
-                const Text('CheckBox')
-              ],
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: chats.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    margin: const EdgeInsets.all(10),
-                    color: Colors.blueAccent,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          chats[index]['message'],
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        Text(
-                          chats[index]['time'],
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+            // Expanded(child: SizedBox()),
+            const Spacer(),
+            // Row(
+            //   children: [
+            //     Checkbox(
+            //       value: check,
+            //       onChanged: (val) {
+            //         setState(() {
+            //           check = !check;
+            //         });
+            //         log(val.toString(), name: 'checkbox value');
+            //       },
+            //     ),
+            //     const Text('CheckBox')
+            //   ],
+            // ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: chats.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  margin: const EdgeInsets.all(10),
+                  color: Colors.blueAccent,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        chats[index]['message'],
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        chats[index]['time'],
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             // const Text('Chat'),
             Padding(
@@ -120,27 +134,43 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
                     ),
                   ),
                   const SizedBox(width: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (textController.text.isNotEmpty) {
-                        chats.add({
-                          "message": textController.text,
-                          'time': '${DateTime.now().second} sec'
-                        });
-                        // log(chats.toString());
-                        textController.clear();
-                        setState(() {});
-                      }
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const StatefulScreen(),
-                      //   ),
-                      // );
-                      // log(textController.text);
-                    },
-                    child: const Text('Send'),
-                  )
+                  if (send == true)
+                    ElevatedButton(
+                      onPressed: () {
+                        if (textController.text.isNotEmpty) {
+                          chats.add({
+                            "message": textController.text,
+                            'time': '${DateTime.now().second} sec'
+                          });
+                          // log(chats.toString());
+                          textController.clear();
+                          setState(() {});
+                        }
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const StatefulScreen(),
+                        //   ),
+                        // );
+                        // log(textController.text);
+                      },
+                      child: const Text('Send'),
+                    ),
+                  if (send == false)
+                    ElevatedButton(
+                      onPressed: () {
+                        if (textController.text.isNotEmpty) {
+                          chats.add({
+                            "message": textController.text,
+                            'time': '${DateTime.now().second} sec'
+                          });
+                          // log(chats.toString());
+                          textController.clear();
+                          setState(() {});
+                        }
+                      },
+                      child: const Text('Record'),
+                    )
                 ],
               ),
             ),
