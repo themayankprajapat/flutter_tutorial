@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/screens/textfield_screen.dart';
+import 'package:flutter_tutorial/screens/user_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         //   seedColor: const Color.fromARGB(255, 124, 196, 255),
         // ),
       ),
-      home: const TextFieldScreen(),
+      home: const UserScreen(),
     );
   }
 }

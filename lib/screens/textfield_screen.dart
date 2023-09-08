@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial/models/messages.dart';
+import 'package:flutter_tutorial/models/user_model.dart';
 
 class TextFieldScreen extends StatefulWidget {
-  const TextFieldScreen({super.key});
+  const TextFieldScreen({super.key, required this.user});
+
+  final UserModel user;
 
   @override
   State<TextFieldScreen> createState() => _TextFieldScreenState();
@@ -10,7 +14,7 @@ class TextFieldScreen extends StatefulWidget {
 class _TextFieldScreenState extends State<TextFieldScreen> {
   final textController = TextEditingController();
 
-  List<Map<String, dynamic>> chats = [];
+  // List<Map<String, dynamic>> chats = [];
   bool check = false;
 
   bool send = false;
@@ -37,14 +41,21 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TextField')),
+      appBar: AppBar(
+        title: Text(widget.user.name),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context, 1211232);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // Expanded(child: SizedBox()),
-            const Spacer(),
             // Row(
             //   children: [
             //     Checkbox(
@@ -59,28 +70,31 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
             //     const Text('CheckBox')
             //   ],
             // ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: chats.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  margin: const EdgeInsets.all(10),
-                  color: Colors.blueAccent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        chats[index]['message'],
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        chats[index]['time'],
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                );
-              },
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.user.messages.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    margin: const EdgeInsets.all(10),
+                    color: Colors.blueAccent,
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          widget.user.messages[index].text,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        const Spacer(),
+                        Text(
+                          widget.user.messages[index].time.minute.toString(),
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
             // const Text('Chat'),
             Padding(
@@ -126,6 +140,7 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
                         // log(textController.text, name: 'onEditngComplete');
                       },
                       onSubmitted: (value) {
+                        sendMessage();
                         // log(value, name: 'onSubmitted');
                       },
                       onTap: () {
@@ -137,15 +152,7 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
                   if (send == true)
                     ElevatedButton(
                       onPressed: () {
-                        if (textController.text.isNotEmpty) {
-                          chats.add({
-                            "message": textController.text,
-                            'time': '${DateTime.now().second} sec'
-                          });
-                          // log(chats.toString());
-                          textController.clear();
-                          setState(() {});
-                        }
+                        sendMessage();
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(
@@ -159,15 +166,15 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
                   if (send == false)
                     ElevatedButton(
                       onPressed: () {
-                        if (textController.text.isNotEmpty) {
-                          chats.add({
-                            "message": textController.text,
-                            'time': '${DateTime.now().second} sec'
-                          });
-                          // log(chats.toString());
-                          textController.clear();
-                          setState(() {});
-                        }
+                        // if (textController.text.isNotEmpty) {
+                        //   chats.add({
+                        //     "message": textController.text,
+                        //     'time': '${DateTime.now().second} sec'
+                        //   });
+                        //   // log(chats.toString());
+                        //   textController.clear();
+                        //   setState(() {});
+                        // }
                       },
                       child: const Text('Record'),
                     )
@@ -178,5 +185,16 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
         ),
       ),
     );
+  }
+
+  void sendMessage() {
+    if (textController.text.isNotEmpty) {
+      widget.user.messages.add(
+        Messages(text: textController.text, time: TimeOfDay.now()),
+      );
+      // log(chats.toString());
+      textController.clear();
+      setState(() {});
+    }
   }
 }
