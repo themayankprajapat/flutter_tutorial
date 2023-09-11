@@ -24,6 +24,11 @@ class _UserScreenState extends State<UserScreen> {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             onTap: () {
+              // Navigator.pushNamed(
+              //   context,
+              //   Routes.chat,
+              //   arguments: {'user': users[index]},
+              // );
               Navigator.push<int>(
                 context,
                 MaterialPageRoute(

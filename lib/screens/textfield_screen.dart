@@ -40,6 +40,8 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final user = ModalRoute.of(context)?.settings.arguments as UserModel;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.user.name),
