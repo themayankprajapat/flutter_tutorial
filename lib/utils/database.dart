@@ -17,10 +17,3 @@ List<UserModel> users = List.generate(
     ),
   ),
 );
-final list = [
-  UserModel(name: 'name', avatar: 'avatar', age: 2, messages: []),
-  UserModel(name: 'name', avatar: 'avatar', age: 2, messages: []),
-  UserModel(name: 'name', avatar: 'avatar', age: 2, messages: []),
-  UserModel(name: 'name', avatar: 'avatar', age: 2, messages: []),
-  UserModel(name: 'name', avatar: 'avatar', age: 2, messages: []),
-];
