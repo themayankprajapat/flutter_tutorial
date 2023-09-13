@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/models/product_model.dart';
 
 class CartProvider extends ChangeNotifier {
-  List<ProductModel> products = List.generate(
+  final _products = List.generate(
     16,
     (index) => ProductModel(
       name: 'Product ${index + 1}',
@@ -13,7 +13,10 @@ class CartProvider extends ChangeNotifier {
     ),
   );
 
-  List<ProductModel> cartProducts = [];
+  List<ProductModel> get getProducts => _products;
+
+  List<ProductModel> get cartProducts =>
+      _products.where((element) => element.inCart).toList();
 
   void addToCart(ProductModel product) {
     cartProducts.add(product);
@@ -22,6 +25,11 @@ class CartProvider extends ChangeNotifier {
 
   void removeFromCart(int index) {
     cartProducts.removeAt(index);
+    notifyListeners();
+  }
+
+  void addCart(int index) {
+    _products[index].inCart = !_products[index].inCart;
     notifyListeners();
   }
 }

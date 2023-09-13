@@ -3,7 +3,7 @@ class ProductModel {
   final String description;
   final int price;
   final String image;
-  final bool inCart;
+  bool inCart;
 
   ProductModel({
     required this.name,

@@ -20,43 +20,41 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProducts =
+        context.select((CartProvider value) => value.cartProducts);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
         centerTitle: true,
       ),
-      body: Consumer<CartProvider>(
-        builder: (context, cart, child) {
-          return cart.cartProducts.isEmpty
-              ? const Center(child: Text('Your Cart is emopty'))
-              : ListView.builder(
-                  itemCount: cart.cartProducts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      onTap: () {},
-                      leading: Image.network(
-                        cart.cartProducts[index].image,
-                        height: 40,
-                        width: 40,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          color: Colors.blueAccent,
-                          width: 40,
-                        ),
-                      ),
-                      title: Text(cart.cartProducts[index].name),
-                      subtitle: Text(cart.cartProducts[index].description),
-                      trailing: IconButton(
-                        onPressed: () {
-                          provider.removeFromCart(index);
-                        },
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                      ),
-                    );
-                  },
+      body: cartProducts.isEmpty
+          ? const Center(child: Text('Your Cart is emopty'))
+          : ListView.builder(
+              itemCount: cartProducts.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  onTap: () {},
+                  leading: Image.network(
+                    cartProducts[index].image,
+                    height: 40,
+                    width: 40,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.blueAccent,
+                      width: 40,
+                    ),
+                  ),
+                  title: Text(cartProducts[index].name),
+                  subtitle: Text(cartProducts[index].description),
+                  trailing: IconButton(
+                    onPressed: () {
+                      provider.addCart(index);
+                    },
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                  ),
                 );
-        },
-      ),
+              },
+            ),
     );
   }
 }

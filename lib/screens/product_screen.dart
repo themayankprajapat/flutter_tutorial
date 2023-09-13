@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial/models/product_model.dart';
 import 'package:flutter_tutorial/providers/cart_provider.dart';
 import 'package:flutter_tutorial/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
@@ -38,11 +39,12 @@ class _ProductScreenState extends State<ProductScreen> {
           )
         ],
       ),
-      body: Consumer<CartProvider>(
+      body: Selector<CartProvider, List<ProductModel>>(
+        selector: (ctx, p1) => p1.getProducts,
         builder: (context, products, child) {
           return GridView.builder(
             padding: const EdgeInsets.all(8),
-            itemCount: products.products.length,
+            itemCount: products.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 5,
@@ -54,7 +56,7 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Column(
                 children: [
                   Image.network(
-                    products.products[index].image,
+                    products[index].image,
                     fit: BoxFit.cover,
                   ),
                   Padding(
@@ -63,18 +65,18 @@ class _ProductScreenState extends State<ProductScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          products.products[index].name,
+                          products[index].name,
                           style: const TextStyle(fontSize: 20),
                         ),
                         Text(
-                          products.products[index].description,
+                          products[index].description,
                           style: const TextStyle(fontSize: 15),
                         ),
                         const SizedBox(height: 10),
                         Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            "Rs. ${products.products[index].price}",
+                            "Rs. ${products[index].price}",
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -84,23 +86,20 @@ class _ProductScreenState extends State<ProductScreen> {
                         const SizedBox(height: 10),
                         ElevatedButton.icon(
                           onPressed: () {
-                            if (products.cartProducts
-                                .contains(products.products[index])) {
+                            if (products[index].inCart) {
                             } else {
-                              provider.addToCart(products.products[index]);
+                              // provider.addToCart(products[index]);
+                              provider.addCart(index);
                             }
+                            setState(() {});
                           },
                           icon: Icon(
-                            products.cartProducts
-                                    .contains(products.products[index])
+                            products[index].inCart
                                 ? Icons.done
                                 : Icons.shopping_cart,
                           ),
                           label: Text(
-                            products.cartProducts
-                                    .contains(products.products[index])
-                                ? 'Added'
-                                : 'Add To cart',
+                            products[index].inCart ? 'Added' : 'Add To cart',
                           ),
                         )
                       ],
