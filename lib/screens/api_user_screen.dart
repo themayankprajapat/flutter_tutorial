@@ -24,7 +24,7 @@ class _ApiUserScreenState extends State<ApiUserScreen> {
             (BuildContext context, AsyncSnapshot<List<ApiUser>?> snapshot) {
           return !snapshot.hasData
               ? const Center(child: CircularProgressIndicator())
-              : snapshot.hasError || snapshot.data == null
+              : snapshot.hasData && snapshot.data == null
                   ? const Center(child: Text('something went wrong'))
                   : ListView.separated(
                       itemCount: snapshot.data!.length,
