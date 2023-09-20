@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter_tutorial/api_service/base_service.dart';
 import 'package:flutter_tutorial/models/api_user.dart';
+import 'package:flutter_tutorial/models/random_user.dart';
 import 'package:flutter_tutorial/utils/api_urls.dart';
 
 class UserService extends BaseService {
@@ -21,6 +22,24 @@ class UserService extends BaseService {
       return userList;
     } catch (e, s) {
       log(e.toString(), name: 'error getUserAPi', stackTrace: s);
+      return null;
+    }
+  }
+
+  Future<RandomUser?> getRandomUserApi() async {
+    try {
+      final response = await getHttp('');
+      log(response.body, name: 'getRandomUserApi');
+      final userMap = json.decode(response.body);
+
+      if (response.statusCode != 200) return null;
+      RandomUser user = RandomUser.fromJson(userMap['results'][0]);
+
+      log(userMap.toString(), name: 'getRandomUserApi response');
+
+      return user;
+    } catch (e, s) {
+      log(e.toString(), name: 'error getRandomUserApi', stackTrace: s);
       return null;
     }
   }
