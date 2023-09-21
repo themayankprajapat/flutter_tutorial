@@ -11,51 +11,55 @@ class RandomUserScreen extends StatefulWidget {
 
 class _RandomUserScreenState extends State<RandomUserScreen> {
   final service = UserService();
+  bool isLoading = true;
+  RandomUser? user;
 
-  // @override
-  // void initState() {
-  //   // service.getRandomUserApi();
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
+
+  void getUser() {
+    setState(() {
+      isLoading = true;
+    });
+    service.getRandomUserApi().then((value) {
+      user = value;
+      isLoading = false;
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('API Users'),
-      ),
+      appBar: AppBar(title: const Text('API Users')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {});
-        },
+        onPressed: getUser,
         child: const Text('NEW'),
       ),
-      body: FutureBuilder(
-        future: service.getRandomUserApi(),
-        builder: (BuildContext context, AsyncSnapshot<RandomUser?> snapshot) {
-          return !snapshot.hasData
-              ? const Center(child: CircularProgressIndicator())
-              : snapshot.hasData && snapshot.data == null
-                  ? const Center(child: Text('something went wrong'))
-                  : Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            radius: 100,
-                            backgroundImage: NetworkImage(
-                              snapshot.data!.images.large,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            '${snapshot.data!.name.title} ${snapshot.data!.name.first} ${snapshot.data!.name.last}',
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                        ],
+      body: Center(
+        child: isLoading
+            ? const CircularProgressIndicator()
+            : user == null
+                ? const Text('something went wrong')
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 100,
+                        backgroundImage: NetworkImage(
+                          user!.images.large,
+                        ),
                       ),
-                    );
-        },
+                      const SizedBox(height: 10),
+                      Text(
+                        '${user!.name.title} ${user!.name.first} ${user!.name.last}',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
       ),
       //
     );
