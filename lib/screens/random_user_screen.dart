@@ -14,6 +14,8 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
   bool isLoading = true;
   RandomUser? user;
 
+  late String myValue;
+
   @override
   void initState() {
     getUser();
@@ -27,6 +29,7 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
     service.getRandomUserApi().then((value) {
       user = value;
       isLoading = false;
+      myValue = '${user!.name.title} ${user!.name.first} ${user!.name.last}';
       setState(() {});
     });
   }
@@ -45,6 +48,7 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
             : user == null
                 ? const Text('something went wrong')
                 : Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircleAvatar(
@@ -55,9 +59,58 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        '${user!.name.title} ${user!.name.first} ${user!.name.last}',
+                        myValue,
                         style: const TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center,
                       ),
+                      Wrap(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                myValue =
+                                    '${user!.name.title} ${user!.name.first} ${user!.name.last}';
+                              });
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                'Name',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                myValue =
+                                    '${user!.location.street.name} ${user!.location.city} ${user!.location.state} ${user!.location.country}';
+                              });
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                'Location',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                myValue = user!.phone;
+                              });
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                'Contact',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
       ),

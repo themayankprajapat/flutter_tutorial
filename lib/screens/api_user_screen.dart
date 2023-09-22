@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/api_service/user_service.dart';
 import 'package:flutter_tutorial/models/api_user.dart';
+import 'package:flutter_tutorial/screens/provider_user_screen.dart';
 
 class ApiUserScreen extends StatefulWidget {
   const ApiUserScreen({super.key});
@@ -17,6 +18,18 @@ class _ApiUserScreenState extends State<ApiUserScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('API Users'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ProviderUserScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.person),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: service.getUsersApi(),
