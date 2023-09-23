@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/providers/auth_provider.dart';
+import 'package:flutter_tutorial/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,17 +12,31 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late AuthProvider provider;
+  late UserProvider userProvider;
 
   @override
   void initState() {
     super.initState();
     provider = Provider.of<AuthProvider>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
   }
 
   final passController = TextEditingController();
   final emailController = TextEditingController();
 
+  // final titleController = TextEditingController();
+  // final bodyController = TextEditingController();
+
   final counter = ValueNotifier(0);
+
+  @override
+  void dispose() {
+    passController.dispose();
+    emailController.dispose();
+    // titleController.dispose();
+    // bodyController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,18 +77,56 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             const SizedBox(height: 20),
+            // TextField(
+            //   controller: emailController,
+            //   // onChanged: (value) {
+            //   //   setState(() {});
+            //   //   // provider.setEmail = value;
+            //   // },
+            //   decoration: const InputDecoration(
+            //     hintText: 'Email',
+            //     border: OutlineInputBorder(),
+            //   ),
+            // ),
+
             TextField(
-              controller: emailController,
+              // controller: titleController,
               // onChanged: (value) {
               //   setState(() {});
               //   // provider.setEmail = value;
               // },
+              onChanged: (value) {
+                userProvider.setTitle = value;
+              },
               decoration: const InputDecoration(
-                hintText: 'Email',
+                hintText: 'Title',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
+
+            TextField(
+              // controller: bodyController,
+              // onChanged: (value) {
+              //   setState(() {});
+              //   // provider.setEmail = value;
+              // },
+              onChanged: (value) {
+                userProvider.setBody = value;
+              },
+              decoration: const InputDecoration(
+                hintText: 'Body',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            ElevatedButton(
+              onPressed: () {
+                userProvider.createPost();
+              },
+              child: const Text('Create Post'),
+            )
             // TextField(
             //   controller: emailController,
             //   onChanged: (value) {

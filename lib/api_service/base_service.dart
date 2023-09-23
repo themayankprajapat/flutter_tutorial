@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_tutorial/utils/api_urls.dart';
@@ -15,6 +16,24 @@ class BaseService {
 
     // log(response.statusCode.toString(), name: 'status');
     // log(response.body, name: 'body');
+    return response;
+  }
+
+  Future<http.Response> postHttp({
+    required String api,
+    required Map<String, dynamic> data,
+  }) async {
+    final url = ApiUrls.baseUrl + api;
+    log(url, name: 'postHttp');
+
+    final body = json.encode(data);
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+
     return response;
   }
 }
