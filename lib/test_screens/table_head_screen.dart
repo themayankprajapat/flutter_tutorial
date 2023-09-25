@@ -52,13 +52,12 @@ class _TableHeadState extends State<TableHead> {
           const Text(
             'Date',
             style: TextStyle(
-                color: Color(0XFF00356A),
-                fontWeight: FontWeight.w700,
-                fontSize: 15.0),
+              color: Color(0XFF00356A),
+              fontWeight: FontWeight.w700,
+              fontSize: 15.0,
+            ),
           ),
-          const SizedBox(
-            width: 10,
-          ),
+          const SizedBox(width: 10),
           Expanded(
             child: ListView.builder(
               controller: widget.scrollController,
@@ -86,14 +85,19 @@ class _TableHeadState extends State<TableHead> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: branchCenter
-                          .map((center) => Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text(center,
-                                    style: const TextStyle(
-                                        color: Color(0XFF00356A),
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 15.0)),
-                              ))
+                          .map(
+                            (center) => Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                center,
+                                style: const TextStyle(
+                                  color: Color(0XFF00356A),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                            ),
+                          )
                           .toList(),
                     ),
                   ],
@@ -101,11 +105,6 @@ class _TableHeadState extends State<TableHead> {
               },
             ),
           ),
-          const Text('Total',
-              style: TextStyle(
-                  color: Color(0XFF00356A),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15.0))
         ],
       ),
     );

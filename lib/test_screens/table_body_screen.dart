@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial/test_screens/sticky.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 
 class TableBodyScreen extends StatefulWidget {
@@ -42,6 +43,7 @@ class _TableBodyScreenState extends State<TableBodyScreen> {
     '01 Aug \n2023',
     '01 Aug \n2023',
     '01 Aug \n2023',
+    'Total'
   ];
 
   @override
@@ -51,9 +53,7 @@ class _TableBodyScreenState extends State<TableBodyScreen> {
         return notification.depth == 0 || notification.depth == 1;
       },
       onRefresh: () async {
-        await Future.delayed(
-          const Duration(seconds: 2),
-        );
+        await Future.delayed(const Duration(seconds: 2));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -104,4 +104,103 @@ class _TableBodyScreenState extends State<TableBodyScreen> {
       ),
     );
   }
+}
+
+List<String> dateTimeList = [
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  '01 Aug \n2023',
+  'Total'
+];
+
+List<CityCell> cities = [
+  CityCell(name: 'Mumbai', center: ['Borivalli', 'HO center']),
+  CityCell(name: 'Chennai', center: ['Chennai']),
+  CityCell(name: 'Delhi NCR', center: ['DLF Phase4', 'NCR']),
+  CityCell(name: 'Ahemdabad', center: ['CJ Road', 'Bopal']),
+];
+
+class YourApp extends StatefulWidget {
+  const YourApp({super.key});
+
+  @override
+  State<YourApp> createState() => _YourAppState();
+}
+
+class _YourAppState extends State<YourApp> {
+  List<String> mainCity = [];
+  List<String> mainCenter = [];
+  @override
+  void initState() {
+    for (CityCell e in cities) {
+      mainCity.add(e.name);
+      for (int i = 0; i < e.center.length; i++) {
+        mainCenter.add(e.center[i]);
+        if (i != 0) mainCity.add('');
+      }
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flex Grid Example'),
+      ),
+      body: StickyTable(
+        columnsLength: mainCenter.length,
+        rowsLength: dateTimeList.length,
+        columnsTitleBuilder: (i) => Column(
+          children: [
+            Expanded(child: Center(child: Text(mainCity[i]))),
+            Padding(
+              padding: EdgeInsets.only(
+                  right: i + 1 == mainCity.length
+                      ? 0
+                      : (mainCity[i + 1] != '' ? 2 : 0)),
+              child: const Divider(color: Colors.black),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(mainCenter[i]),
+              ),
+            ),
+            // Spacer(),
+            const Divider(color: Colors.black),
+          ],
+        ),
+        rowsTitleBuilder: (i) => Text(dateTimeList[i]),
+        contentCellBuilder: (i, j) => Text('${i + j}'),
+        legendCell: const Column(
+          children: [
+            Expanded(child: Center(child: Text('Date'))),
+            Divider(color: Colors.black),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CityCell {
+  final String name;
+  final List<String> center;
+
+  CityCell({required this.name, required this.center});
 }
