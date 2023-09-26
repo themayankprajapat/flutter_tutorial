@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
@@ -14,6 +16,41 @@ class _FormScreenState extends State<FormScreen> {
 
   String? priceError;
 
+  File? image;
+
+  List<File> imageList = [];
+
+  void pick(ImageSource source) async {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: source);
+      if (pickedFile != null) {
+        log(pickedFile.path, name: 'pickedFile');
+        final iamgeFile = File(pickedFile.path);
+        log(iamgeFile.toString(), name: 'imageFile');
+        setState(() {
+          image = iamgeFile;
+        });
+        // final base64 = base64Encode(await pickedFile.readAsBytes());
+        // log(base64, name: 'base64 string');
+      }
+    } catch (e) {
+      log(e.toString(), name: 'ImagePicker Error');
+    }
+  }
+
+  void pickMultiImage() async {
+    final picker = ImagePicker();
+    List<File> imageFiles = [];
+    final pickedFiles = await picker.pickMultiImage();
+    for (XFile e in pickedFiles) {
+      imageFiles.add(File(e.path));
+    }
+    setState(() {
+      imageList.addAll(imageFiles);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,11 +60,52 @@ class _FormScreenState extends State<FormScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Wrap(
+              children: List.generate(
+                imageList.length + 1,
+                (index) => index == imageList.length
+                    ? GestureDetector(
+                        onTap: pickMultiImage,
+                        child: Container(
+                          margin: const EdgeInsets.all(5),
+                          height: 80,
+                          width: 80,
+                          color: const Color.fromARGB(144, 68, 137, 255),
+                          child: const Icon(Icons.add),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Image.file(
+                          imageList[index],
+                          fit: BoxFit.cover,
+                          height: 80,
+                          width: 80,
+                        ),
+                      ),
+              ),
+            ),
+            // GestureDetector(
+            //   onTap: () => pick(ImageSource.camera),
+            //   child: Container(
+            //     height: 200,
+            //     width: 200,
+            //     decoration: BoxDecoration(
+            //       color: const Color.fromARGB(144, 68, 137, 255),
+            //       image: image == null
+            //           ? null
+            //           : DecorationImage(
+            //               image: FileImage(image!),
+            //               fit: BoxFit.cover,
+            //             ),
+            //     ),
+            //     child: image == null ? const Icon(Icons.add) : null,
+            //   ),
+            // ),
             const AppTextField(
               labelText: 'Product name',
               errorText: 'Product name is required',
             ),
-            const SizedBox(height: 20),
             AppTextField(
               labelText: 'Product price',
               errorText: 'Product price is required',
@@ -40,7 +118,6 @@ class _FormScreenState extends State<FormScreen> {
                 setState(() {});
               },
             ),
-            const SizedBox(height: 20),
             const AppTextField(
               labelText: 'Product Description',
             ),
