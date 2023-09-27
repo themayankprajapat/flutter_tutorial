@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,6 +52,10 @@ class _FormScreenState extends State<FormScreen> {
     });
   }
 
+  bool scale = false;
+
+  final widgetKey = GlobalKey<_AppTextFieldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,18 +65,38 @@ class _FormScreenState extends State<FormScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Transform.rotate(
+                    angle: math.pi / 4,
+                    child: Text('Something '),
+                  ),
+                  // SizedBox(width: 20),
+                  VerticalDivider(),
+                  Text(' Place'),
+                ],
+              ),
+            ),
+            const Divider(),
+            const SizedBox(height: 20),
             Wrap(
               children: List.generate(
                 imageList.length + 1,
                 (index) => index == imageList.length
                     ? GestureDetector(
                         onTap: pickMultiImage,
-                        child: Container(
-                          margin: const EdgeInsets.all(5),
-                          height: 80,
-                          width: 80,
-                          color: const Color.fromARGB(144, 68, 137, 255),
-                          child: const Icon(Icons.add),
+                        child: Transform.scale(
+                          scaleX: scale ? 2 : 1,
+                          scaleY: scale ? 3 : 1,
+                          child: Container(
+                            margin: const EdgeInsets.all(5),
+                            height: 80,
+                            width: 80,
+                            color: const Color.fromARGB(144, 68, 137, 255),
+                            child: const Icon(Icons.add),
+                          ),
                         ),
                       )
                     : Padding(
@@ -107,6 +132,7 @@ class _FormScreenState extends State<FormScreen> {
               errorText: 'Product name is required',
             ),
             AppTextField(
+              key: widgetKey,
               labelText: 'Product price',
               errorText: 'Product price is required',
               customError: priceError,
@@ -123,9 +149,13 @@ class _FormScreenState extends State<FormScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  log('Prodct Added');
-                }
+                setState(() {
+                  scale = !scale;
+                });
+                // widgetKey.currentState?.myMethod();
+                // if (_formKey.currentState!.validate()) {
+                //   log('Prodct Added');
+                // }
               },
               child: const Text('ADD'),
             )
@@ -136,7 +166,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 }
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     required this.labelText,
@@ -156,28 +186,39 @@ class AppTextField extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  void myMethod() {
+    change = !change;
+    setState(() {});
+  }
+
+  bool change = false;
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: margin ?? const EdgeInsets.all(20),
+      padding: widget.margin ?? const EdgeInsets.all(20),
       child: TextFormField(
-        onTap: onTap,
-        onChanged: onChanged,
-        controller: controller,
+        onTap: widget.onTap,
+        onChanged: widget.onChanged,
+        controller: widget.controller,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) {
           if (value!.isEmpty) {
-            return errorText;
+            return widget.errorText;
           }
-          return customError;
+          return widget.customError;
         },
         decoration: InputDecoration(
           // icon: Icon(Icons.abc),
-          labelText: labelText,
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
+          labelText: widget.labelText,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: change ? Colors.amber : Colors.black),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: change ? Colors.amber : Colors.black),
           ),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.purple),
