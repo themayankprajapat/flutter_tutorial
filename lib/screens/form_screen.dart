@@ -71,11 +71,11 @@ class _FormScreenState extends State<FormScreen> {
                 children: [
                   Transform.rotate(
                     angle: math.pi / 4,
-                    child: Text('Something '),
+                    child: const Text('Something '),
                   ),
                   // SizedBox(width: 20),
-                  VerticalDivider(),
-                  Text(' Place'),
+                  const VerticalDivider(),
+                  const Text(' Place'),
                 ],
               ),
             ),
