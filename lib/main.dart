@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/providers/auth_provider.dart';
 import 'package:flutter_tutorial/providers/cart_provider.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
-import 'package:flutter_tutorial/screens/listview_screen.dart';
+import 'package:flutter_tutorial/screens/pageview_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           //   seedColor: const Color.fromARGB(255, 124, 196, 255),
           // ),
         ),
-        home: const ListViewScreen(),
+        home: const PageViewScreen(),
       ),
     );
   }
