@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/providers/auth_provider.dart';
 import 'package:flutter_tutorial/providers/cart_provider.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
-import 'package:flutter_tutorial/screens/material_widgets.dart';
+import 'package:flutter_tutorial/todo_app/todo_screen.dart';
 import 'package:provider/provider.dart';
 
 final messengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           //   seedColor: const Color.fromARGB(255, 124, 196, 255),
           // ),
         ),
-        home: const MaterialWidgets(),
+        home: const TodoScreen(),
       ),
     );
   }

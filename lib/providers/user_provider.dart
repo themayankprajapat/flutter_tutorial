@@ -3,11 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/api_service/user_service.dart';
 import 'package:flutter_tutorial/models/api_user.dart';
+import 'package:flutter_tutorial/models/photo_model.dart';
+import 'package:flutter_tutorial/todo_app/db_helper.dart';
+import 'package:flutter_tutorial/todo_app/todo_model.dart';
 
 class UserProvider extends ChangeNotifier {
   final service = UserService();
 
   List<ApiUser> apiUserList = [];
+  List<PhotoModel> photos = [];
 
   String? _title;
   set setTitle(String? val) => _title = val;
@@ -35,5 +39,26 @@ class UserProvider extends ChangeNotifier {
     } catch (e) {
       log(e.toString(), name: 'error catch createPost');
     }
+  }
+
+  Future<int> getPhotos({int limit = 10, int offset = 1}) async {
+    final response = await service.getPhotosApi(limit, offset);
+
+    debugPrint('$response getPhotos');
+    List<PhotoModel> tempList = List<PhotoModel>.from(
+      response.map((e) => PhotoModel.fromJson(e)),
+    );
+    offset == 1 ? photos = tempList : photos += tempList;
+    notifyListeners();
+    return tempList.length;
+  }
+
+  List<TodoModel> todos = [];
+
+  Future<void> getTodos() async {
+    final response = await DBHelper.instance.getTodos();
+
+    todos = response;
+    notifyListeners();
   }
 }

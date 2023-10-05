@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/api_service/base_service.dart';
 import 'package:flutter_tutorial/models/api_user.dart';
 import 'package:flutter_tutorial/models/random_user.dart';
@@ -52,5 +53,17 @@ class UserService extends BaseService {
     } else {
       log('Some error occurred', name: 'error createPostApi');
     }
+  }
+
+  Future getPhotosApi(int limit, int offset) async {
+    final api = '${ApiUrls.photoList}?page=$offset&limit=$limit';
+
+    final response = await getHttp(api);
+
+    debugPrint('${response.body} getPhotosApi');
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    return [];
   }
 }
