@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
 import 'package:flutter_tutorial/todo_app/db_helper.dart';
 import 'package:flutter_tutorial/todo_app/todo_model.dart';
+import 'package:flutter_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class TodoScreen extends StatefulWidget {
@@ -14,16 +15,29 @@ class TodoScreen extends StatefulWidget {
 class _TodoScreenState extends State<TodoScreen> {
   late UserProvider provider;
   bool isLoading = true;
+  bool paginate = true;
+  bool loader = false;
+  int offset = 0;
 
   @override
   void initState() {
     provider = Provider.of<UserProvider>(context, listen: false);
-    provider.getTodos().then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
+    getData();
     super.initState();
+  }
+
+  void getData() {
+    if (!paginate) return;
+    setState(() {
+      loader = true;
+    });
+    provider.getTodos(offset: offset).then((value) {
+      isLoading = false;
+      if (value < 10) paginate = false;
+      loader = false;
+      offset += 10;
+      setState(() {});
+    });
   }
 
   @override
@@ -32,6 +46,7 @@ class _TodoScreenState extends State<TodoScreen> {
       appBar: AppBar(title: const Text('TODOs'), centerTitle: true),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          debugPrint(provider.todos.length.toString());
           showDialog(
             context: context,
             builder: (context) => AddTodo(no: provider.todos.length),
@@ -44,37 +59,43 @@ class _TodoScreenState extends State<TodoScreen> {
           : Selector<UserProvider, List<TodoModel>>(
               selector: (p0, p1) => p1.todos,
               builder: (context, list, child) {
-                return ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: list.length,
-                  itemBuilder: (context, index) => ListTile(
-                    title: Text(list[index].title),
-                    subtitle: Text(list[index].body),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AddTodo(
-                                no: provider.todos.length,
-                                model: list[index],
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.edit),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            DBHelper.instance
-                                .delete(list[index])
-                                .then((value) => provider.getTodos());
-                          },
-                          icon: const Icon(Icons.delete),
-                        ),
-                      ],
-                    ),
+                return NotificationListener(
+                  onNotification: (notification) =>
+                      Utils.scrollNotifier(notification, getData),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: list.length + (loader ? 1 : 0),
+                    itemBuilder: (context, index) => index == list.length
+                        ? const Center(child: CircularProgressIndicator())
+                        : ListTile(
+                            title: Text(list[index].title),
+                            subtitle: Text(list[index].body),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AddTodo(
+                                        no: provider.todos.length,
+                                        model: list[index],
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.edit),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    DBHelper.instance
+                                        .delete(list[index])
+                                        .then((value) => provider.getTodos());
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                ),
+                              ],
+                            ),
+                          ),
                   ),
                 );
               },

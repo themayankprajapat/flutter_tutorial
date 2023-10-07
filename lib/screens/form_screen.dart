@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
@@ -28,15 +29,23 @@ class _FormScreenState extends State<FormScreen> {
       if (pickedFile != null) {
         log(pickedFile.path, name: 'pickedFile');
         final iamgeFile = File(pickedFile.path);
-        log(iamgeFile.toString(), name: 'imageFile');
+        debugPrint('$iamgeFile imageFile');
+        final appDir = await getApplicationDocumentsDirectory();
+        final filePath = appDir.path;
+        final fileName = iamgeFile.path.split('/').last;
+
+        final savedFile = await iamgeFile.copy('$filePath/$fileName');
+        debugPrint('$filePath filePath');
+        debugPrint('$savedFile savedFile');
+
         setState(() {
-          image = iamgeFile;
+          image = savedFile;
         });
         // final base64 = base64Encode(await pickedFile.readAsBytes());
         // log(base64, name: 'base64 string');
       }
     } catch (e) {
-      log(e.toString(), name: 'ImagePicker Error');
+      debugPrint('${e}ImagePicker Error');
     }
   }
 
@@ -86,7 +95,9 @@ class _FormScreenState extends State<FormScreen> {
                 imageList.length + 1,
                 (index) => index == imageList.length
                     ? GestureDetector(
-                        onTap: pickMultiImage,
+                        onTap: () {
+                          pick(ImageSource.camera);
+                        },
                         child: Transform.scale(
                           scaleX: scale ? 2 : 1,
                           scaleY: scale ? 3 : 1,

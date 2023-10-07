@@ -55,10 +55,10 @@ class UserProvider extends ChangeNotifier {
 
   List<TodoModel> todos = [];
 
-  Future<void> getTodos() async {
-    final response = await DBHelper.instance.getTodos();
-
-    todos = response;
+  Future<int> getTodos({int limit = 10, int offset = 0}) async {
+    final response = await DBHelper.instance.getTodos(limit, offset);
+    offset == 0 ? todos = response : todos += response;
     notifyListeners();
+    return response.length;
   }
 }

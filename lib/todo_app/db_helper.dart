@@ -43,10 +43,11 @@ class DBHelper {
     );
   }
 
-  Future<List<TodoModel>> getTodos() async {
+  Future<List<TodoModel>> getTodos(int limit, int offset) async {
     final db = await database;
 
-    final List<Map<String, dynamic>> maps = await db.query(_tableName);
+    final List<Map<String, dynamic>> maps =
+        await db.query(_tableName, limit: limit, offset: offset);
 
     return List.generate(maps.length, (i) => TodoModel.fromJson(maps[i]));
   }
