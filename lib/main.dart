@@ -1,16 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial/screens/login_screen.dart';
+import 'package:flutter_tutorial/utils/firebase_options.dart';
 import 'package:flutter_tutorial/hive/hive_db.dart';
 import 'package:flutter_tutorial/hive/todo.dart';
 import 'package:flutter_tutorial/providers/auth_provider.dart';
 import 'package:flutter_tutorial/providers/cart_provider.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
-import 'package:flutter_tutorial/todo_app/todo_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 final messengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Hive.initFlutter();
   Hive.registerAdapter(TodoAdapter());
   await Hive.openBox(boxName);
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
           //   seedColor: const Color.fromARGB(255, 124, 196, 255),
           // ),
         ),
-        home: const TodoScreen(),
+        home: const LoginScreen(),
       ),
     );
   }

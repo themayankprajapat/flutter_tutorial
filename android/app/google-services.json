@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "499792878646",
+    "firebase_url": "https://flutter-tutorial-fb69b-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "flutter-tutorial-fb69b",
+    "storage_bucket": "flutter-tutorial-fb69b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499792878646:android:58927ea2192125a9538c97",
+        "android_client_info": {
+          "package_name": "com.example.flutter_tutorial"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCablvz-rUoaEl9E-EcmznslHKMU2uP2H8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

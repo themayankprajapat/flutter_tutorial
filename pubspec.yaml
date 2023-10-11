@@ -34,6 +34,8 @@ dependencies:
   path: ^1.8.3
   hive:
   hive_flutter:
+  firebase_core: ^2.17.0
+  firebase_auth: ^4.10.1
 
 dev_dependencies:
   flutter_test:

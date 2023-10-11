@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial/providers/auth_provider.dart';
-import 'package:flutter_tutorial/providers/user_provider.dart';
-import 'package:flutter_tutorial/screens/signup_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_tutorial/api_service/firebasea_api.dart';
+import 'package:flutter_tutorial/screens/login_screen.dart';
+import 'package:flutter_tutorial/todo_app/todo_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  late AuthProvider provider;
-  late UserProvider userProvider;
-
+class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    provider = Provider.of<AuthProvider>(context, listen: false);
-    userProvider = Provider.of<UserProvider>(context, listen: false);
   }
 
   final passController = TextEditingController();
@@ -40,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login'), centerTitle: true),
+      appBar: AppBar(title: const Text('SignUp'), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -55,10 +49,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 return null;
               },
               controller: emailController,
-              onChanged: (value) {
-                setState(() {});
-                // provider.setEmail = value;
-              },
               decoration: const InputDecoration(
                 hintText: 'Email',
                 border: OutlineInputBorder(),
@@ -68,15 +58,11 @@ class _LoginScreenState extends State<LoginScreen> {
             TextFormField(
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Password is required';
+                  return 'Passsword is required';
                 }
                 return null;
               },
               controller: passController,
-              onChanged: (value) {
-                setState(() {});
-                // provider.setEmail = value;
-              },
               decoration: const InputDecoration(
                 hintText: 'Password',
                 border: OutlineInputBorder(),
@@ -86,9 +72,21 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                provider.login(emailController.text, passController.text);
+                FireBaseApi.instance
+                    .signUp(emailController.text, passController.text)
+                    .then((value) {
+                  if (value != null) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TodoScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  }
+                });
               },
-              child: const Text('Login'),
+              child: const Text('SignUp'),
             ),
             const SizedBox(height: 40),
             GestureDetector(
@@ -96,12 +94,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SignUpScreen(),
+                    builder: (context) => const LoginScreen(),
                   ),
                   (route) => false,
                 );
               },
-              child: const Text('Don\'t have an account? sign up'),
+              child: const Text('Already have an account? Login'),
             )
           ],
         ),
