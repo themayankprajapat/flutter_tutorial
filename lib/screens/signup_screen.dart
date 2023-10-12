@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/api_service/firebasea_api.dart';
 import 'package:flutter_tutorial/screens/login_screen.dart';
-import 'package:flutter_tutorial/todo_app/todo_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -73,18 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ElevatedButton(
               onPressed: () {
                 FireBaseApi.instance
-                    .signUp(emailController.text, passController.text)
-                    .then((value) {
-                  if (value != null) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TodoScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  }
-                });
+                    .signUp(emailController.text, passController.text);
               },
               child: const Text('SignUp'),
             ),

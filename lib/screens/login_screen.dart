@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial/api_service/firebasea_api.dart';
 import 'package:flutter_tutorial/providers/auth_provider.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
 import 'package:flutter_tutorial/screens/signup_screen.dart';
@@ -83,10 +84,18 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                FireBaseApi.instance.signInWithGoogle();
+              },
+              child: const Text('Login with Google'),
+            ),
+            const SizedBox(height: 20),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                provider.login(emailController.text, passController.text);
+                FireBaseApi.instance
+                    .login(emailController.text, passController.text);
               },
               child: const Text('Login'),
             ),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
 import 'package:flutter_tutorial/todo_app/db_helper.dart';
@@ -42,8 +43,20 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(FirebaseAuth.instance.currentUser.toString());
     return Scaffold(
-      appBar: AppBar(title: const Text('TODOs'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('TODOs'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           debugPrint(provider.todos.length.toString());
