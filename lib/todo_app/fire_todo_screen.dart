@@ -1,19 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial/api_service/firebasea_api.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
-import 'package:flutter_tutorial/todo_app/db_helper.dart';
 import 'package:flutter_tutorial/todo_app/todo_model.dart';
 import 'package:flutter_tutorial/utils/utils.dart';
 import 'package:provider/provider.dart';
 
-class TodoScreen extends StatefulWidget {
-  const TodoScreen({super.key});
+class FireTodoScreen extends StatefulWidget {
+  const FireTodoScreen({super.key});
 
   @override
-  State<TodoScreen> createState() => _TodoScreenState();
+  State<FireTodoScreen> createState() => _FireTodoScreenState();
 }
 
-class _TodoScreenState extends State<TodoScreen> {
+class _FireTodoScreenState extends State<FireTodoScreen> {
   late UserProvider provider;
   bool isLoading = true;
   bool paginate = true;
@@ -28,24 +28,29 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 
   void getData() {
-    if (!paginate) return;
-    setState(() {
-      loader = true;
+    provider.getFireTodos().then((value) {
+      setState(() {
+        isLoading = false;
+      });
     });
-    provider.getTodos(offset: offset).then((value) {
-      isLoading = false;
-      if (value < 10) paginate = false;
-      loader = false;
-      offset += 10;
-      setState(() {});
-    });
+    // if (!paginate) return;
+    // setState(() {
+    //   loader = true;
+    // });
+    // provider.getTodos(offset: offset).then((value) {
+    //   isLoading = false;
+    //   if (value < 10) paginate = false;
+    //   loader = false;
+    //   offset += 10;
+    //   setState(() {});
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TODOs'),
+        title: const Text('Fire TODOs'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -58,18 +63,20 @@ class _TodoScreenState extends State<TodoScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          debugPrint(provider.todos.length.toString());
+          debugPrint(provider.fireTodos.length.toString());
           showDialog(
             context: context,
-            builder: (context) => AddTodo(no: provider.todos.length),
-          );
+            builder: (context) => AddTodo(no: provider.fireTodos.length),
+          ).then((value) {
+            provider.getFireTodos();
+          });
         },
         child: const Icon(Icons.add),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Selector<UserProvider, List<TodoModel>>(
-              selector: (p0, p1) => p1.todos,
+              selector: (p0, p1) => p1.fireTodos,
               builder: (context, list, child) {
                 return NotificationListener(
                   onNotification: (notification) =>
@@ -87,21 +94,21 @@ class _TodoScreenState extends State<TodoScreen> {
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AddTodo(
-                                        no: provider.todos.length,
-                                        model: list[index],
-                                      ),
-                                    );
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (context) => AddTodo(
+                                    //     no: provider.fireTodos.length,
+                                    //     model: list[index],
+                                    //   ),
+                                    // );
                                   },
                                   icon: const Icon(Icons.edit),
                                 ),
                                 IconButton(
                                   onPressed: () {
-                                    DBHelper.instance
-                                        .delete(list[index])
-                                        .then((value) => provider.getTodos());
+                                    // DBHelper.instance
+                                    //     .delete(list[index])
+                                    //     .then((value) => provider.getTodos());
                                   },
                                   icon: const Icon(Icons.delete),
                                 ),
@@ -173,31 +180,12 @@ class _AddTodoState extends State<AddTodo> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                if (widget.model == null) {
-                  DBHelper.instance
-                      .createTodo(
-                    TodoModel(
-                      id: widget.no,
-                      title: controller1.text,
-                      body: controller2.text,
-                    ),
-                  )
-                      .then((value) {
-                    context.read<UserProvider>().getTodos();
-                    Navigator.pop(context);
-                  });
-                  return;
-                }
-                DBHelper.instance
-                    .update(
-                  TodoModel(
-                    id: widget.model!.id,
-                    title: controller1.text,
-                    body: controller2.text,
-                  ),
-                )
+                FireBaseApi.instance
+                    .createTodo(TodoModel(
+                        id: widget.no,
+                        title: controller1.text,
+                        body: controller2.text))
                     .then((value) {
-                  context.read<UserProvider>().getTodos();
                   Navigator.pop(context);
                 });
               },

@@ -17,6 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final passController = TextEditingController();
   final emailController = TextEditingController();
+  final nameController = TextEditingController();
 
   // final titleController = TextEditingController();
   // final bodyController = TextEditingController();
@@ -25,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void dispose() {
     passController.dispose();
     emailController.dispose();
+    nameController.dispose();
     // titleController.dispose();
     // bodyController.dispose();
     super.dispose();
@@ -39,6 +41,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 20),
+            TextFormField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Username is required';
+                }
+                return null;
+              },
+              controller: nameController,
+              decoration: const InputDecoration(
+                hintText: 'Username',
+                border: OutlineInputBorder(),
+              ),
+            ),
             const SizedBox(height: 20),
             TextFormField(
               validator: (value) {
@@ -71,8 +87,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                FireBaseApi.instance
-                    .signUp(emailController.text, passController.text);
+                FireBaseApi.instance.signUp(
+                  emailController.text,
+                  passController.text,
+                  nameController.text,
+                );
               },
               child: const Text('SignUp'),
             ),

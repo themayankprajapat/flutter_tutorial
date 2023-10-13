@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/screens/login_screen.dart';
-import 'package:flutter_tutorial/todo_app/todo_screen.dart';
+import 'package:flutter_tutorial/todo_app/fire_todo_screen.dart';
 
 class InitialScreen extends StatelessWidget {
   const InitialScreen({super.key});
@@ -11,7 +11,9 @@ class InitialScreen extends StatelessWidget {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-        return snapshot.data == null ? const LoginScreen() : const TodoScreen();
+        return snapshot.data == null
+            ? const LoginScreen()
+            : const FireTodoScreen();
       },
     );
   }

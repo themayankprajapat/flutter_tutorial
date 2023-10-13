@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial/api_service/firebasea_api.dart';
 import 'package:flutter_tutorial/api_service/user_service.dart';
 import 'package:flutter_tutorial/models/api_user.dart';
 import 'package:flutter_tutorial/models/photo_model.dart';
@@ -60,5 +61,22 @@ class UserProvider extends ChangeNotifier {
     offset == 0 ? todos = response : todos += response;
     notifyListeners();
     return response.length;
+  }
+
+  List<TodoModel> fireTodos = [];
+
+  Future<int> getFireTodos({int limit = 10, int offset = 0}) async {
+    try {
+      final response = await FireBaseApi.instance.getTodo();
+      List<TodoModel> tempData = List.from(
+        response.map((e) => TodoModel.fromJson(e.data())),
+      );
+      log(response.toString(), name: 'getFireTodss');
+      fireTodos = tempData;
+      notifyListeners();
+    } catch (e) {
+      log(e.toString(), name: 'getFireTodss');
+    }
+    return 0;
   }
 }
