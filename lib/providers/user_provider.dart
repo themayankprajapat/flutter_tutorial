@@ -13,6 +13,8 @@ class UserProvider extends ChangeNotifier {
 
   List<ApiUser> apiUserList = [];
   List<PhotoModel> photos = [];
+  List<TodoModel> todos = [];
+  List<TodoModel> fireTodos = [];
 
   String? _title;
   set setTitle(String? val) => _title = val;
@@ -54,16 +56,12 @@ class UserProvider extends ChangeNotifier {
     return tempList.length;
   }
 
-  List<TodoModel> todos = [];
-
   Future<int> getTodos({int limit = 10, int offset = 0}) async {
     final response = await DBHelper.instance.getTodos(limit, offset);
     offset == 0 ? todos = response : todos += response;
     notifyListeners();
     return response.length;
   }
-
-  List<TodoModel> fireTodos = [];
 
   Future<int> getFireTodos({int limit = 10, int offset = 0}) async {
     try {

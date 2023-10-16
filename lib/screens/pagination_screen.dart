@@ -50,7 +50,7 @@ class _PaginationScreenState extends State<PaginationScreen> {
               children: [
                 Expanded(
                   child: Selector<UserProvider, List<PhotoModel>>(
-                    selector: (p0, p1) => p1.photos,
+                    selector: (ctx, p1) => p1.photos,
                     builder: (context, list, child) {
                       return NotificationListener(
                         onNotification: (notification) =>

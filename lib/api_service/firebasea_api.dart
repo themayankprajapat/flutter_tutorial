@@ -67,15 +67,19 @@ class FireBaseApi {
 
   Future<void> createTodo(TodoModel model) async {
     final user = FirebaseAuth.instance.currentUser;
+
     final todos = FirebaseFirestore.instance
         .collection('users')
         .doc(user!.uid)
         .collection('todos');
-    await todos.add(model.toMap()).then((value) {
-      log(
-        value.id + '  ' + value.path + "  " + value.parent.toString(),
-        name: 'createTodo',
-      );
+
+    model.id = todos.doc().id;
+
+    await todos.doc(model.id).set(model.toMap()).then((value) {
+      // log(
+      //   value.id + '  ' + value.path + "  " + value.parent.toString(),
+      //   name: 'createTodo',
+      // );
     }).catchError((e) {
       log(e.toString(), name: 'createTodo');
     });
@@ -99,5 +103,26 @@ class FireBaseApi {
         .collection('todos');
     final res = await todos.get();
     return res.docs;
+  }
+
+  Future<void> editTodo(TodoModel model) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final todoId = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('todos')
+        .doc(model.id);
+    await todoId.set(model.toMap());
+  }
+
+  
+  Future<void> deleteTodo(String id) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final todoId = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('todos')
+        .doc(id);
+    await todoId.delete();
   }
 }

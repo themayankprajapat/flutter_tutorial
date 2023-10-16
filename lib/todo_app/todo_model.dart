@@ -1,9 +1,9 @@
 class TodoModel {
-  final int id;
+  dynamic id;
   final String title;
   final String body;
 
-  TodoModel({required this.id, required this.title, required this.body});
+  TodoModel({this.id = '', required this.title, required this.body});
 
   factory TodoModel.fromJson(Map<String, dynamic> json) {
     return TodoModel(

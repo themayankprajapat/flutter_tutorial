@@ -66,7 +66,7 @@ class _FireTodoScreenState extends State<FireTodoScreen> {
           debugPrint(provider.fireTodos.length.toString());
           showDialog(
             context: context,
-            builder: (context) => AddTodo(no: provider.fireTodos.length),
+            builder: (context) => const AddTodo(),
           ).then((value) {
             provider.getFireTodos();
           });
@@ -94,21 +94,23 @@ class _FireTodoScreenState extends State<FireTodoScreen> {
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                    // showDialog(
-                                    //   context: context,
-                                    //   builder: (context) => AddTodo(
-                                    //     no: provider.fireTodos.length,
-                                    //     model: list[index],
-                                    //   ),
-                                    // );
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          AddTodo(model: list[index]),
+                                    ).then((value) {
+                                      provider.getFireTodos();
+                                    });
                                   },
                                   icon: const Icon(Icons.edit),
                                 ),
                                 IconButton(
                                   onPressed: () {
-                                    // DBHelper.instance
-                                    //     .delete(list[index])
-                                    //     .then((value) => provider.getTodos());
+                                    FireBaseApi.instance
+                                        .deleteTodo(list[index].id)
+                                        .then((value) {
+                                      provider.getFireTodos();
+                                    });
                                   },
                                   icon: const Icon(Icons.delete),
                                 ),
@@ -124,9 +126,8 @@ class _FireTodoScreenState extends State<FireTodoScreen> {
 }
 
 class AddTodo extends StatefulWidget {
-  const AddTodo({super.key, required this.no, this.model});
+  const AddTodo({super.key, this.model});
 
-  final int no;
   final TodoModel? model;
 
   @override
@@ -180,11 +181,20 @@ class _AddTodoState extends State<AddTodo> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
+                if (widget.model != null) {
+                  FireBaseApi.instance
+                      .editTodo(TodoModel(
+                          id: widget.model!.id,
+                          title: controller1.text,
+                          body: controller2.text))
+                      .then((value) {
+                    Navigator.pop(context);
+                  });
+                  return;
+                }
                 FireBaseApi.instance
                     .createTodo(TodoModel(
-                        id: widget.no,
-                        title: controller1.text,
-                        body: controller2.text))
+                        title: controller1.text, body: controller2.text))
                     .then((value) {
                   Navigator.pop(context);
                 });
