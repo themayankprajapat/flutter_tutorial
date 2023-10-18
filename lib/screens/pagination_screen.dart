@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial/models/photo_model.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
-import 'package:flutter_tutorial/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 class PaginationScreen extends StatefulWidget {
   const PaginationScreen({super.key});
@@ -17,7 +14,7 @@ class _PaginationScreenState extends State<PaginationScreen> {
   bool loader = false;
   @override
   void initState() {
-    provider = Provider.of<UserProvider>(context, listen: false);
+    // provider = Provider.of<UserProvider>(context, listen: false);
     pagination();
     super.initState();
   }
@@ -48,29 +45,29 @@ class _PaginationScreenState extends State<PaginationScreen> {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                Expanded(
-                  child: Selector<UserProvider, List<PhotoModel>>(
-                    selector: (ctx, p1) => p1.photos,
-                    builder: (context, list, child) {
-                      return NotificationListener(
-                        onNotification: (notification) =>
-                            Utils.scrollNotifier(notification, pagination),
-                        child: GridView.builder(
-                          padding: const EdgeInsets.all(8),
-                          itemCount: list.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                          itemBuilder: (context, index) => GridTile(
-                            footer: Text(list[index].author),
-                            child: Image.network(list[index].pic),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                // Expanded(
+                //   child: Selector<UserProvider, List<PhotoModel>>(
+                //     selector: (ctx, p1) => p1.photos,
+                //     builder: (context, list, child) {
+                //       return NotificationListener(
+                //         onNotification: (notification) =>
+                //             Utils.scrollNotifier(notification, pagination),
+                //         child: GridView.builder(
+                //           padding: const EdgeInsets.all(8),
+                //           itemCount: list.length,
+                //           gridDelegate:
+                //               const SliverGridDelegateWithFixedCrossAxisCount(
+                //             crossAxisCount: 2,
+                //           ),
+                //           itemBuilder: (context, index) => GridTile(
+                //             footer: Text(list[index].author),
+                //             child: Image.network(list[index].pic),
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
                 if (loader) const Center(child: CircularProgressIndicator())
               ],
             ),

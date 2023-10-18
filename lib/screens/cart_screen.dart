@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/providers/cart_provider.dart';
-import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -15,13 +14,13 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    provider = Provider.of<CartProvider>(context, listen: false);
+    // provider = Provider.of<CartProvider>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final cartProducts =
-        context.select((CartProvider value) => value.cartProducts);
+    final cartProducts = [];
+    // context.select((CartProvider value) => value.cartProducts);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),

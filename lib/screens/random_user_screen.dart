@@ -1,45 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tutorial/api_service/user_service.dart';
-import 'package:flutter_tutorial/models/random_user.dart';
+import 'package:flutter_tutorial/providers/user_provider.dart';
 
-class RandomUserScreen extends StatefulWidget {
+class RandomUserScreen extends ConsumerStatefulWidget {
   const RandomUserScreen({super.key});
 
   @override
-  State<RandomUserScreen> createState() => _RandomUserScreenState();
+  ConsumerState<RandomUserScreen> createState() => _RandomUserScreenState();
 }
 
-class _RandomUserScreenState extends State<RandomUserScreen> {
+class _RandomUserScreenState extends ConsumerState<RandomUserScreen> {
   final service = UserService();
   bool isLoading = true;
-  RandomUser? user;
+  // RandomUser? user;
 
   late String myValue;
 
+  late UserProvider provider;
+
   @override
   void initState() {
-    getUser();
+    // getUser();
+    provider = ref.read(userProvider);
+    provider.getRandomUser().then((user) {
+      setState(() {
+        isLoading = false;
+        myValue = '${user?.name.title} ${user?.name.first} ${user?.name.last}';
+      });
+    });
     super.initState();
   }
 
-  Future<void> getUser() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
-    await service.getRandomUserApi().then((value) {
-      user = value;
-      isLoading = false;
-      myValue = '${user!.name.title} ${user!.name.first} ${user!.name.last}';
-      setState(() {});
-    });
-  }
+  // Future<void> getUser() async {
+  // setState(() {
+  //   isLoading = true;
+  // });
+  // await service.getRandomUserApi().then((value) {
+  //   user = value;
+  //   isLoading = false;
+  //   myValue = '${user!.name.title} ${user!.name.first} ${user!.name.last}';
+  //   setState(() {});
+  // });
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider).randomUser;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('API Users')),
+      appBar: AppBar(title: const Text('Random User')),
       floatingActionButton: FloatingActionButton(
-        onPressed: getUser,
+        onPressed: provider.getRandomUser,
         child: const Text('NEW'),
       ),
       body: RefreshIndicator(
@@ -47,9 +59,7 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
         backgroundColor: Colors.black,
         // displacement: MediaQuery.of(context).size.height / 2,
         edgeOffset: 200,
-        onRefresh: () async {
-          await getUser();
-        },
+        onRefresh: provider.getRandomUser,
         child: ListView(
           children: [
             isLoading
@@ -64,7 +74,7 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
                             CircleAvatar(
                               radius: 100,
                               backgroundImage: NetworkImage(
-                                user!.images.large,
+                                user.images.large,
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -79,7 +89,7 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
                                   onTap: () {
                                     setState(() {
                                       myValue =
-                                          '${user!.name.title} ${user!.name.first} ${user!.name.last}';
+                                          '${user.name.title} ${user.name.first} ${user.name.last}';
                                     });
                                   },
                                   child: const Padding(
@@ -94,7 +104,7 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
                                   onTap: () {
                                     setState(() {
                                       myValue =
-                                          '${user!.location.street.name} ${user!.location.city} ${user!.location.state} ${user!.location.country}';
+                                          '${user.location.street.name} ${user.location.city} ${user.location.state} ${user.location.country}';
                                     });
                                   },
                                   child: const Padding(
@@ -108,7 +118,7 @@ class _RandomUserScreenState extends State<RandomUserScreen> {
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      myValue = user!.phone;
+                                      myValue = user.phone;
                                     });
                                   },
                                   child: const Padding(

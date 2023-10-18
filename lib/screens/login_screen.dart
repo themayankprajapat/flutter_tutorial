@@ -3,7 +3,6 @@ import 'package:flutter_tutorial/api_service/firebasea_api.dart';
 import 'package:flutter_tutorial/providers/auth_provider.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
 import 'package:flutter_tutorial/screens/signup_screen.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,8 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    provider = Provider.of<AuthProvider>(context, listen: false);
-    userProvider = Provider.of<UserProvider>(context, listen: false);
+    // provider = Provider.of<AuthProvider>(context, listen: false);
+    // userProvider = Provider.of<UserProvider>(context, listen: false);
   }
 
   final passController = TextEditingController();

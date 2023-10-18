@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
 import 'package:flutter_tutorial/todo_app/db_helper.dart';
 import 'package:flutter_tutorial/todo_app/todo_model.dart';
-import 'package:flutter_tutorial/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
@@ -22,7 +20,7 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   void initState() {
-    provider = Provider.of<UserProvider>(context, listen: false);
+    // provider = Provider.of<UserProvider>(context, listen: false);
     getData();
     super.initState();
   }
@@ -66,52 +64,52 @@ class _TodoScreenState extends State<TodoScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Selector<UserProvider, List<TodoModel>>(
-              selector: (p0, p1) => p1.todos,
-              builder: (context, list, child) {
-                return NotificationListener(
-                  onNotification: (notification) =>
-                      Utils.scrollNotifier(notification, getData),
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: list.length + (loader ? 1 : 0),
-                    itemBuilder: (context, index) => index == list.length
-                        ? const Center(child: CircularProgressIndicator())
-                        : ListTile(
-                            title: Text(list[index].title),
-                            subtitle: Text(list[index].body),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AddTodo(
-                                        no: provider.todos.length,
-                                        model: list[index],
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    DBHelper.instance
-                                        .delete(list[index])
-                                        .then((value) => provider.getTodos());
-                                  },
-                                  icon: const Icon(Icons.delete),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ),
-                );
-              },
-            ),
+      // body: isLoading
+      //     ? const Center(child: CircularProgressIndicator())
+      //     : Selector<UserProvider, List<TodoModel>>(
+      //         selector: (p0, p1) => p1.todos,
+      //         builder: (context, list, child) {
+      //           return NotificationListener(
+      //             onNotification: (notification) =>
+      //                 Utils.scrollNotifier(notification, getData),
+      //             child: ListView.builder(
+      //               padding: const EdgeInsets.all(8),
+      //               itemCount: list.length + (loader ? 1 : 0),
+      //               itemBuilder: (context, index) => index == list.length
+      //                   ? const Center(child: CircularProgressIndicator())
+      //                   : ListTile(
+      //                       title: Text(list[index].title),
+      //                       subtitle: Text(list[index].body),
+      //                       trailing: Row(
+      //                         mainAxisSize: MainAxisSize.min,
+      //                         children: [
+      //                           IconButton(
+      //                             onPressed: () {
+      //                               showDialog(
+      //                                 context: context,
+      //                                 builder: (context) => AddTodo(
+      //                                   no: provider.todos.length,
+      //                                   model: list[index],
+      //                                 ),
+      //                               );
+      //                             },
+      //                             icon: const Icon(Icons.edit),
+      //                           ),
+      //                           IconButton(
+      //                             onPressed: () {
+      //                               DBHelper.instance
+      //                                   .delete(list[index])
+      //                                   .then((value) => provider.getTodos());
+      //                             },
+      //                             icon: const Icon(Icons.delete),
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //             ),
+      //           );
+      //         },
+      //       ),
     );
   }
 }
@@ -183,7 +181,7 @@ class _AddTodoState extends State<AddTodo> {
                     ),
                   )
                       .then((value) {
-                    context.read<UserProvider>().getTodos();
+                    // context.read<UserProvider>().getTodos();
                     Navigator.pop(context);
                   });
                   return;
@@ -197,7 +195,7 @@ class _AddTodoState extends State<AddTodo> {
                   ),
                 )
                     .then((value) {
-                  context.read<UserProvider>().getTodos();
+                  // context.read<UserProvider>().getTodos();
                   Navigator.pop(context);
                 });
               },

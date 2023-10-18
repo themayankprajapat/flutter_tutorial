@@ -1,12 +1,16 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tutorial/api_service/firebasea_api.dart';
 import 'package:flutter_tutorial/api_service/user_service.dart';
 import 'package:flutter_tutorial/models/api_user.dart';
 import 'package:flutter_tutorial/models/photo_model.dart';
+import 'package:flutter_tutorial/models/random_user.dart';
 import 'package:flutter_tutorial/todo_app/db_helper.dart';
 import 'package:flutter_tutorial/todo_app/todo_model.dart';
+
+final userProvider = ChangeNotifierProvider((ref) => UserProvider());
 
 class UserProvider extends ChangeNotifier {
   final service = UserService();
@@ -15,6 +19,8 @@ class UserProvider extends ChangeNotifier {
   List<PhotoModel> photos = [];
   List<TodoModel> todos = [];
   List<TodoModel> fireTodos = [];
+
+  RandomUser? randomUser;
 
   String? _title;
   set setTitle(String? val) => _title = val;
@@ -25,10 +31,16 @@ class UserProvider extends ChangeNotifier {
   Future<void> getApiUsers() async {
     final response = await service.getUsersApi();
 
-    if (response != null) {
-      apiUserList = response;
-      notifyListeners();
-    }
+    apiUserList = response;
+    notifyListeners();
+  }
+
+  Future<RandomUser?> getRandomUser() async {
+    final response = await service.getRandomUserApi();
+    randomUser = response;
+    log(response.toString(), name: 'randomuser');
+    notifyListeners();
+    return response;
   }
 
   Future<void> createPost() async {

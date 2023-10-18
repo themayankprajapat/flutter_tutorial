@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/api_service/firebasea_api.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
 import 'package:flutter_tutorial/todo_app/todo_model.dart';
-import 'package:flutter_tutorial/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 class FireTodoScreen extends StatefulWidget {
   const FireTodoScreen({super.key});
@@ -22,7 +20,7 @@ class _FireTodoScreenState extends State<FireTodoScreen> {
 
   @override
   void initState() {
-    provider = Provider.of<UserProvider>(context, listen: false);
+    // provider = Provider.of<UserProvider>(context, listen: false);
     getData();
     super.initState();
   }
@@ -73,54 +71,54 @@ class _FireTodoScreenState extends State<FireTodoScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Selector<UserProvider, List<TodoModel>>(
-              selector: (p0, p1) => p1.fireTodos,
-              builder: (context, list, child) {
-                return NotificationListener(
-                  onNotification: (notification) =>
-                      Utils.scrollNotifier(notification, getData),
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: list.length + (loader ? 1 : 0),
-                    itemBuilder: (context, index) => index == list.length
-                        ? const Center(child: CircularProgressIndicator())
-                        : ListTile(
-                            title: Text(list[index].title),
-                            subtitle: Text(list[index].body),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) =>
-                                          AddTodo(model: list[index]),
-                                    ).then((value) {
-                                      provider.getFireTodos();
-                                    });
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    FireBaseApi.instance
-                                        .deleteTodo(list[index].id)
-                                        .then((value) {
-                                      provider.getFireTodos();
-                                    });
-                                  },
-                                  icon: const Icon(Icons.delete),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ),
-                );
-              },
-            ),
+      // body: isLoading
+      //     ? const Center(child: CircularProgressIndicator())
+      //     : Selector<UserProvider, List<TodoModel>>(
+      //         selector: (p0, p1) => p1.fireTodos,
+      //         builder: (context, list, child) {
+      //           return NotificationListener(
+      //             onNotification: (notification) =>
+      //                 Utils.scrollNotifier(notification, getData),
+      //             child: ListView.builder(
+      //               padding: const EdgeInsets.all(8),
+      //               itemCount: list.length + (loader ? 1 : 0),
+      //               itemBuilder: (context, index) => index == list.length
+      //                   ? const Center(child: CircularProgressIndicator())
+      //                   : ListTile(
+      //                       title: Text(list[index].title),
+      //                       subtitle: Text(list[index].body),
+      //                       trailing: Row(
+      //                         mainAxisSize: MainAxisSize.min,
+      //                         children: [
+      //                           IconButton(
+      //                             onPressed: () {
+      //                               showDialog(
+      //                                 context: context,
+      //                                 builder: (context) =>
+      //                                     AddTodo(model: list[index]),
+      //                               ).then((value) {
+      //                                 provider.getFireTodos();
+      //                               });
+      //                             },
+      //                             icon: const Icon(Icons.edit),
+      //                           ),
+      //                           IconButton(
+      //                             onPressed: () {
+      //                               FireBaseApi.instance
+      //                                   .deleteTodo(list[index].id)
+      //                                   .then((value) {
+      //                                 provider.getFireTodos();
+      //                               });
+      //                             },
+      //                             icon: const Icon(Icons.delete),
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //             ),
+      //           );
+      //         },
+      //       ),
     );
   }
 }

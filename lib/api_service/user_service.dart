@@ -8,13 +8,13 @@ import 'package:flutter_tutorial/models/random_user.dart';
 import 'package:flutter_tutorial/utils/api_urls.dart';
 
 class UserService extends BaseService {
-  Future<List<ApiUser>?> getUsersApi() async {
+  Future<List<ApiUser>> getUsersApi() async {
     try {
       final response = await getHttp(ApiUrls.user);
       log(response.body, name: 'getUsersApi');
       final userMapList = json.decode(response.body);
 
-      if (response.statusCode != 200) return null;
+      if (response.statusCode != 200) return [];
       List<ApiUser> userList =
           List<ApiUser>.from(userMapList.map((e) => ApiUser.fromJson(e)));
 
@@ -23,7 +23,7 @@ class UserService extends BaseService {
       return userList;
     } catch (e, s) {
       log(e.toString(), name: 'error getUserAPi', stackTrace: s);
-      return null;
+      return [];
     }
   }
 

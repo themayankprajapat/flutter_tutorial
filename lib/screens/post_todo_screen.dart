@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial/providers/auth_provider.dart';
 import 'package:flutter_tutorial/providers/user_provider.dart';
-import 'package:provider/provider.dart';
 
 class PostTodoScreen extends StatefulWidget {
   const PostTodoScreen({super.key});
@@ -17,8 +16,8 @@ class _PostTodoScreenState extends State<PostTodoScreen> {
   @override
   void initState() {
     super.initState();
-    provider = Provider.of<AuthProvider>(context, listen: false);
-    userProvider = Provider.of<UserProvider>(context, listen: false);
+    // provider = Provider.of<AuthProvider>(context, listen: false);
+    // userProvider = Provider.of<UserProvider>(context, listen: false);
   }
 
   final passController = TextEditingController();
