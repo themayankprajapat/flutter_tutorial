@@ -41,77 +41,79 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Login'), centerTitle: true),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            TextFormField(
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Email is required';
-                }
-                return null;
-              },
-              controller: emailController,
-              onChanged: (value) {
-                setState(() {});
-                // provider.setEmail = value;
-              },
-              decoration: const InputDecoration(
-                hintText: 'Email',
-                border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              TextFormField(
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Email is required';
+                  }
+                  return null;
+                },
+                controller: emailController,
+                onChanged: (value) {
+                  setState(() {});
+                  // provider.setEmail = value;
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Password is required';
-                }
-                return null;
-              },
-              controller: passController,
-              onChanged: (value) {
-                setState(() {});
-                // provider.setEmail = value;
-              },
-              decoration: const InputDecoration(
-                hintText: 'Password',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 20),
+              TextFormField(
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Password is required';
+                  }
+                  return null;
+                },
+                controller: passController,
+                onChanged: (value) {
+                  setState(() {});
+                  // provider.setEmail = value;
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                FireBaseApi.instance.signInWithGoogle();
-              },
-              child: const Text('Login with Google'),
-            ),
-            const SizedBox(height: 20),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                FireBaseApi.instance
-                    .login(emailController.text, passController.text);
-              },
-              child: const Text('Login'),
-            ),
-            const SizedBox(height: 40),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SignUpScreen(),
-                  ),
-                  (route) => false,
-                );
-              },
-              child: const Text('Don\'t have an account? sign up'),
-            )
-          ],
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  FireBaseApi.instance.signInWithGoogle();
+                },
+                child: const Text('Login with Google'),
+              ),
+              const SizedBox(height: 20),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  FireBaseApi.instance
+                      .login(emailController.text, passController.text);
+                },
+                child: const Text('Login'),
+              ),
+              const SizedBox(height: 40),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpScreen(),
+                    ),
+                    (route) => false,
+                  );
+                },
+                child: const Text('Don\'t have an account? sign up'),
+              )
+            ],
+          ),
         ),
       ),
     );
