@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _BlocTodoScreenState extends State<BlocTodoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('Bloc TODOs'),
         centerTitle: true,
@@ -49,7 +51,7 @@ class _BlocTodoScreenState extends State<BlocTodoScreen> {
       body: BlocConsumer<TodoBloc, TodoState>(
         listener: (context, state) {
           if (state is TodoAddState) {
-            log(state.success.toString(), name: 'addstate');
+            // log(state.success.toString(), name: 'addstate');
             if (state.success) {
               Navigator.pop(context);
               Utils.showSnack('Todo Added');
@@ -67,7 +69,34 @@ class _BlocTodoScreenState extends State<BlocTodoScreen> {
         },
         builder: (context, state) {
           return state is TodoFetched
-              ? ListView.builder(
+              ?
+              // Center(
+              //     child: Container(
+              //       width: 200,
+              //       height: 100,
+              //       decoration: BoxDecoration(
+              //         gradient: const LinearGradient(
+              //           stops: [0.3, 0.6, .9],
+              //           tileMode: TileMode.repeated,
+              //           colors: [Colors.red, Colors.amber, Colors.green],
+              //         ),
+              //         borderRadius: BorderRadius.circular(50),
+              //       ),
+              //       padding: const EdgeInsets.all(5),
+              //       child: ElevatedButton(
+              //         style: ElevatedButton.styleFrom(
+              //           shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(50),
+              //           ),
+              //           fixedSize: const Size(200, 100),
+              //         ),
+              //         onPressed: () {},
+              //         child: const Text('Button'),
+              //       ),
+              //     ),
+              //   )
+
+              ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: state.list.length,
                   itemBuilder: (context, index) => ListTile(
